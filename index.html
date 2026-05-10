@@ -41,6 +41,7 @@
         .part-indicator { position: absolute; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; z-index: 5; }
         .part-line { position: absolute; background: #3b82f6; height: 2px; transform-origin: left center; z-index: 4; }
         
+        /* WAVE 1 Style Targets */
         .part-target { 
             position: absolute; border: 2px dashed #3b82f6; background: rgba(59, 130, 246, 0.1); border-radius: 4px; 
             width: 75px; height: 35px; display: flex; align-items: center; justify-content: center; 
@@ -49,7 +50,9 @@
         
         .filled-correct { background: #1e3a8a !important; color: white !important; border-style: solid !important; border-width: 1px !important; font-size: 8px !important; }
         .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .choice-box-uniform { padding: 12px; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        
+        /* SMALLER Choices for easier fitting */
+        .choice-box-uniform { padding: 10px; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; }
         
         .race-choice { font-size: 16px !important; padding: 15px !important; }
 
@@ -68,18 +71,17 @@
         .btn-green { background: #16a34a; }
         .rainbow-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; padding: 10px 0; width: 100%; }
         .rainbow-box { width: 52px; height: 70px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: white; text-transform: uppercase; flex-shrink: 0; }
-        .race-letter-box { width: 85px; height: 85px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #cbd5e1; flex-direction: column; text-align: center; padding: 2px; }
+        .race-letter-box { width: 85px; height: 85px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 2px solid #cbd5e1; flex-direction: column; text-align: center; padding: 2px; }
         
-        /* UPDATED: Wider and more visible blanks for PASS */
-        .blank-inline { 
-            display: inline-flex; width: 90px; height: 28px; 
-            border-bottom: 3px solid #3b82f6; margin: 0 5px; 
-            vertical-align: middle; color: #2563eb; font-weight: bold; 
-            justify-content: center; align-items: center;
-            background: rgba(59, 130, 246, 0.05);
+        /* WAVE 4 Inline Target Box */
+        .pass-target-box { 
+            display: inline-flex !important; position: static !important; 
+            width: 80px !important; height: 32px !important; 
+            border: 2px dashed #3b82f6; background: rgba(59, 130, 246, 0.05); 
+            border-radius: 4px; vertical-align: middle; margin: 0 4px;
+            align-items: center; justify-content: center; font-size: 9px !important;
         }
-        .slot-correct { background: #dcfce7; border-bottom: 3px solid #16a34a; color: #166534; }
-        
+
         #buster-error-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 5000; width: 90%; max-width: 400px; border: 4px solid #ef4444; }
 
         #audio-control {
@@ -179,7 +181,7 @@
 
     <div id="quiz-section" class="checkpoint-box">
         <h3>Prep Your Gear</h3>
-        <p id="s1-text" style="font-size: 13px;">You’re walking the hallway and see a small trash fire. You grab the nearest extinguisher. You need to know your tools before you act.</p>
+        <p id="s1-text" style="font-size: 20px;">You’re walking the hallway and see a small trash fire. You grab the nearest extinguisher. You need to know your tools before you act.</p>
         <button id="get-ext-btn" class="btn" onclick="revealS1Diagram()">I'M READY</button>
         <div class="diagram-wrapper" id="s1-diagram">
             <div class="part-indicator" style="top:62px; left:146px;"></div>
@@ -207,10 +209,10 @@
 
     <div id="phone-section" class="checkpoint-box">
         <h3>Call for Backup</h3>
-        <p id="s2-desc" style="font-size: 13px;">You’ve got the extinguisher, but you can’t fight a hospital fire alone. Protocols say you must alert the team while you prepare to fight.</p>
+        <p id="s2-desc" style="font-size: 20px;">You’ve got the extinguisher, but you can’t fight a hospital fire alone. Protocols say you must alert the team while you prepare to fight.</p>
         <button id="s2-start-btn" class="btn" onclick="document.getElementById('s2-desc').style.display='none'; this.style.display='none'; document.getElementById('s2-phone-ui').style.display='block';">GRAB THE UNIT PHONE</button>
         <div id="s2-phone-ui" style="display:none;">
-            <p style="font-size: 13px;">Quick! Dial the St. Luke’s Emergency Hotline to bring the professionals to your floor. You must dial the correct number on the keypad and call.</p>
+            <p style="font-size: 20px;">Quick! Dial the St. Luke’s Emergency Hotline to bring the professionals to your floor. You must dial the correct number on the keypad and call.</p>
             <div class="iphone-frame">
                 <div class="iphone-screen">
                     <div class="iphone-display" id="phone-display"></div>
@@ -229,7 +231,7 @@
 
     <div id="grid-stage-section" class="checkpoint-box">
         <h2 id="grid-title"></h2>
-        <p id="grid-instr" style="font-size: 13px;"></p>
+        <p id="grid-instr" style="font-size: 20px;"></p>
         <button id="grid-start-btn" class="btn" onclick="startGridTask()">PROTECT YOURSELF</button>
         <div id="grid-content-ui" style="display:none;">
             <div style="margin: 15px 0;">
@@ -243,16 +245,18 @@
 
     <div id="pass-section" class="checkpoint-box">
         <h3>The Final Stand</h3>
-        <p id="s4-desc" style="font-size: 13px;">The shaking stops. The fire is still there and growing. It’s now or never. Use the extinguisher correctly, show us you know the right steps to stop the blaze before it reaches the patient rooms.</p>
+        <p id="s4-desc" style="font-size: 20px;">The shaking stops. The fire is still there and growing. It’s now or never. Use the extinguisher correctly, show us you know the right steps to stop the blaze before it reaches the patient rooms.</p>
         <button id="s4-start-btn" class="btn" onclick="startPassTask()">STOP THE BLAZE</button>
         <div id="s4-content-ui" style="display:none;">
-            <p style="font-size: 13px;">What is the correct sequence to activate the extinguisher and put out the fire? You must complete the sequence by dragging and dropping them correctly.</p>
-            <div style="text-align:left; font-size:13px; background:#f8fafc; padding:15px; border-radius:12px; color:black; line-height:2.5;">
-                Pull the <span class="blank-inline t-trg" id="slot-PIN"></span>,<br>
-                Aim the <span class="blank-inline t-trg" id="slot-NOZZLE"></span> at base,<br>
-                Squeeze the <span class="blank-inline t-trg" id="slot-LEVER"></span>,<br>
-                <span class="blank-inline t-trg" id="slot-SWEEP"></span> from side to side.
+            <p style="font-size: 20px; margin-bottom: 20px;">What is the correct sequence to activate the extinguisher? Drag and drop the labels into the correct boxes.</p>
+            
+            <div style="text-align:left; font-size:14px; background:#f8fafc; padding:20px; border-radius:12px; color:black; line-height:3.0;">
+                Pull the <div class="part-target pass-target-box" data-answer="PIN"></div>,<br>
+                Aim the <div class="part-target pass-target-box" data-answer="NOZZLE"></div> at the base,<br>
+                Squeeze the <div class="part-target pass-target-box" data-answer="LEVER"></div>,<br>
+                <div class="part-target pass-target-box" data-answer="SWEEP"></div> side to side.
             </div>
+
             <div id="pass-bank" class="choice-grid" style="margin-top:20px;"></div>
         </div>
         <button id="passReturnBtn" class="btn btn-green" style="display:none;" onclick="showBusterComment()">OPEN FIRE!</button>
@@ -427,7 +431,7 @@
                 
                 activeItem.style.position = 'fixed'; 
                 activeItem.style.zIndex = 2000;
-                activeItem.style.pointerEvents = 'none'; // CRITICAL: Stop item from blocking the target
+                activeItem.style.pointerEvents = 'none'; 
                 activeItem.style.left = (e.clientX - shiftX) + 'px';
                 activeItem.style.top = (e.clientY - shiftY) + 'px';
                 activeItem.setPointerCapture(e.pointerId);
@@ -444,19 +448,18 @@
         document.addEventListener("pointerup", (e) => {
             if (!activeItem) return;
             
-            activeItem.style.pointerEvents = 'auto'; // Restore pointer events
+            activeItem.style.pointerEvents = 'auto';
 
             const itemRect = activeItem.getBoundingClientRect();
             const itemX = itemRect.left + itemRect.width / 2;
             const itemY = itemRect.top + itemRect.height / 2;
 
             let snappingTarget = null;
-            const targets = document.querySelectorAll(".part-target, .drop-zone, .t-trg");
+            const targets = document.querySelectorAll(".part-target, .drop-zone");
             
-            // MAGNETIC CHECK: Using a generous bounding box check
             targets.forEach(t => {
                 const rect = t.getBoundingClientRect();
-                const buffer = 30; // 30px magnetic radius extension
+                const buffer = 40; // Increased buffer for low-error snapping
                 
                 if (itemX > rect.left - buffer && itemX < rect.right + buffer && 
                     itemY > rect.top - buffer && itemY < rect.bottom + buffer) {
@@ -467,29 +470,25 @@
             if (snappingTarget) {
                 const itemText = activeItem.innerText.trim();
 
-                // WAVE 1: DIAGRAM LOGIC
+                // WAVE 1 & WAVE 4: UNIFIED Logic
                 if (snappingTarget.classList.contains("part-target")) {
                     if (snappingTarget.dataset.answer === itemText) {
                         snappingTarget.innerText = itemText; 
                         snappingTarget.classList.add("filled-correct"); 
                         activeItem.style.display = "none";
-                        if (document.querySelectorAll('#s1-diagram .filled-correct').length === 6) 
+                        
+                        // Check Wave 1 Diagram
+                        if (wavesCleared === 0 && document.querySelectorAll('#s1-diagram .filled-correct').length === 6) 
                             document.getElementById("quizReturnBtn").style.display = "block";
+                        
+                        // Check Wave 4 PASS (matching Wave 1 logic)
+                        if (wavesCleared === 3 && document.querySelectorAll('#pass-section .filled-correct').length === 4)
+                            document.getElementById("passReturnBtn").style.display = "block";
+
                     } else { triggerErr(); }
                 }
-                // EARTHQUAKE / EVACUATION LOGIC
                 else if (snappingTarget.classList.contains("drop-zone")) {
                     handleGridDrop(activeItem, snappingTarget);
-                }
-                // WAVE 4: PASS SEQUENCE LOGIC
-                else if (snappingTarget.classList.contains("t-trg")) {
-                    if (snappingTarget.id === "slot-" + itemText) {
-                        snappingTarget.innerText = itemText; 
-                        snappingTarget.classList.add("slot-correct"); 
-                        activeItem.style.display = "none";
-                        pcCount++; 
-                        if(pcCount === 4) document.getElementById("passReturnBtn").style.display = "block";
-                    } else { triggerErr(); }
                 }
             }
 
@@ -676,8 +675,12 @@
         document.getElementById("s4-desc").style.display = 'none';
         document.getElementById("s4-start-btn").style.display = 'none';
         document.getElementById("s4-content-ui").style.display = 'block';
-        pcCount=0;
-        document.querySelectorAll(".t-trg").forEach(el => {el.innerText = ""; el.classList.remove("slot-correct");});
+        
+        document.querySelectorAll("#pass-section .part-target").forEach(t => {
+            t.innerText = "";
+            t.classList.remove("filled-correct");
+        });
+
         document.getElementById("pass-bank").innerHTML=["PIN","NOZZLE","LEVER","SWEEP"].sort(()=>Math.random()-0.5).map(c=>`<div class="choice-box-uniform dr-item" style="touch-action:none;">${c}</div>`).join(''); 
     }
 
@@ -685,7 +688,7 @@
         document.getElementById("logic-box").style.display = 'block'; 
         document.getElementById("logic-title").innerText = "The Life-Saving Checklist"; 
         document.getElementById("logic-desc").innerHTML = `
-            <p style="font-size:13px; color:#1e293b; line-height:1.4;">
+            <p style="font-size:20px; color:#1e293b; line-height:1.4;">
                 You’ve reached a patient room and see smoke. Before you even touch the fire, 
                 you have to follow the safety rule of hospital safety to keep everyone alive.
             </p>`;
@@ -701,7 +704,7 @@
         
         if(wavesCleared === 4) { 
             document.getElementById("logic-desc").innerHTML = `
-                <p style="font-size:22px; font-weight:bold; color:#1e293b; line-height:1.4;">
+                <p style="font-size:20px; color:#1e293b; line-height:1.4;">
                     Follow the R-A-C-E steps in the correct order to manage the scene. 
                     You must tap the correct meaning of R-A-C-E.
                 </p>`;
@@ -723,7 +726,7 @@
         ];
         const o = document.getElementById("logic-body"); 
         o.innerHTML = `<div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">` + 
-            raceData.map(r=>`<div class="race-letter-box" id="r${r.l}"><b>${r.l}</b><div style="font-size:9px;" id="rt${r.l}"></div></div>`).join('') + 
+            raceData.map(r=>`<div class="race-letter-box" id="r${r.l}"><b>${r.l}</b><div style="font-size:20px;" id="rt${r.l}"></div></div>`).join('') + 
             `</div><div class="choice-grid" id="ro"></div>`;
         
         for(let i=0; i<rStep; i++){ 
@@ -798,9 +801,9 @@
         
         document.getElementById("logic-title").innerText = title;
         document.getElementById("logic-desc").innerHTML = `
-            <p style="font-size:13px; color:#1e293b; line-height:1.4; margin-bottom:10px;">${scenarioText}</p>
+            <p style="font-size:20px; color:#1e293b; line-height:1.4; margin-bottom:10px;">${scenarioText}</p>
             <div id="logic-question-area" style="display:none;">
-                <p style="font-size:14px; font-weight:bold; color:#2563eb;">${desc}</p>
+                <p style="font-size:20px; font-weight:bold; color:#2563eb;">${desc}</p>
             </div>
         `;
         document.getElementById("logicNextBtn").innerText = btnTxt;
