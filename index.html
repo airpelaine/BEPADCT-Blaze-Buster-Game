@@ -6,11 +6,11 @@
     <style>
         body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background-color: #0f172a; font-family: 'Segoe UI', sans-serif; color: #f7fafc; overflow: hidden; touch-action: none; user-select: none; }
         
-        #pre-game-box, #player-form-box, #start-menu, .checkpoint-box, #buster-comment-box { 
+        #pre-game-box, #player-form-box, #start-menu, .checkpoint-box, #buster-comment-box, #buster-error-box { 
             text-align: center; background: #1e293b; padding: 30px; border-radius: 20px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 85%; max-width: 450px; z-index: 100;
         }
-        #player-form-box, #start-menu, #game-section, .checkpoint-box, #buster-comment-box { display: none; }
+        #player-form-box, #start-menu, #game-section, .checkpoint-box, #buster-comment-box, #buster-error-box { display: none; }
 
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 12px; color: #60a5fa; margin-bottom: 5px; font-weight: bold; }
@@ -41,26 +41,18 @@
         .part-indicator { position: absolute; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; z-index: 5; }
         .part-line { position: absolute; background: #3b82f6; height: 2px; transform-origin: left center; z-index: 4; }
         
-        /* Updated to Rectangle */
         .part-target { 
-            position: absolute; 
-            border: 2px dashed #3b82f6; 
-            background: rgba(59, 130, 246, 0.1); 
-            border-radius: 4px; 
-            width: 75px; 
-            height: 35px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 8px; 
-            text-align: center; 
-            font-weight: bold; 
-            z-index: 6; 
+            position: absolute; border: 2px dashed #3b82f6; background: rgba(59, 130, 246, 0.1); border-radius: 4px; 
+            width: 75px; height: 35px; display: flex; align-items: center; justify-content: center; 
+            font-size: 8px; text-align: center; font-weight: bold; z-index: 6; 
         }
         
         .filled-correct { background: #1e3a8a !important; color: white !important; border-style: solid !important; border-width: 1px !important; font-size: 8px !important; }
         .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         .choice-box-uniform { padding: 12px; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        
+        .race-choice { font-size: 16px !important; padding: 15px !important; }
+
         .drop-zone { border: 2px dashed #94a3b8; border-radius: 10px; padding: 10px; background: #f1f5f9; min-height: 50px; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .filled-correct-grid { background: #dcfce7 !important; border: 2px solid #16a34a !important; color: #166534 !important; }
         
@@ -76,9 +68,11 @@
         .btn-green { background: #16a34a; }
         .rainbow-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; padding: 10px 0; width: 100%; }
         .rainbow-box { width: 52px; height: 70px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: white; text-transform: uppercase; flex-shrink: 0; }
-        .race-letter-box { width: 85px; height: 85px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 9px; border: 2px solid #cbd5e1; flex-direction: column; text-align: center; padding: 2px; }
+        .race-letter-box { width: 85px; height: 85px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #cbd5e1; flex-direction: column; text-align: center; padding: 2px; }
         .blank-inline { display: inline-flex; width: 80px; height: 25px; border-bottom: 2px solid #3b82f6; margin: 0 5px; vertical-align: middle; color: #2563eb; font-weight: bold; justify-content: center; align-items: center; }
         .slot-correct { background: #dcfce7; border-bottom: 2px solid #16a34a; color: #166534; }
+        
+        #buster-error-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 5000; width: 90%; max-width: 400px; border: 4px solid #ef4444; }
     </style>
 </head>
 <body>
@@ -106,6 +100,12 @@
             <input type="text" id="user-id" placeholder="Enter employee no. / doctor's code / student no" oninput="validate(); this.value = this.value.replace(/[^0-9]/g, '');">
         </div>
         <button class="btn" id="form-submit-btn" style="opacity: 0.5;" onclick="saveDetails()">PROCEED</button>
+    </div>
+
+    <div id="buster-error-box">
+        <div class="speech-bubble" style="background: #fee2e2; color: #991b1b;" id="buster-error-text">Whoops! That's not quite right, Partner. Try again!</div>
+        <div class="buster-character" style="font-size: 60px;">🧯</div>
+        <button class="btn btn-green" onclick="closeError()">TRY AGAIN</button>
     </div>
 
     <div id="start-menu">
@@ -142,27 +142,21 @@
         <p id="s1-text" style="font-size: 13px;">You’re walking the hallway and see a small trash fire. You grab the nearest extinguisher. You need to know your tools before you act.</p>
         <button id="get-ext-btn" class="btn" onclick="revealS1Diagram()">I'M READY</button>
         <div class="diagram-wrapper" id="s1-diagram">
-
             <div class="part-indicator" style="top:62px; left:146px;"></div>
             <div class="part-line" style="top:65px; left:150px; width:36px; transform:rotate(-90deg);"></div>
             <div class="part-target" data-answer="PIN" style="top:-7px; left:115px;"></div>
-            
             <div class="part-indicator" style="top:45px; left:180px;"></div>
             <div class="part-line" style="top:46px; left:188px; width:41px; transform:rotate(-20deg);"></div>
             <div class="part-target" data-answer="LEVER" style="top:15px; left:227px;"></div>
-            
             <div class="part-indicator" style="top:75px; left:175px;"></div>
             <div class="part-line" style="top:77px; left:179px; width:50px; transform:rotate(10deg);"></div>
             <div class="part-target" data-answer="HANDLE" style="top:60px; left:228px;"></div>
-            
             <div class="part-indicator" style="top:75px; left:140px;"></div>
             <div class="part-line" style="top:79px; left:140px; width:60px; transform:rotate(180deg);"></div>
             <div class="part-target" data-answer="PRESSURE GAUGE" style="top:60px; left:3px;"></div>
-            
             <div class="part-indicator" style="top:140px; left:80px;"></div>
             <div class="part-line" style="top:144px; left:81px; width:35px; transform:rotate(160deg);"></div>
             <div class="part-target" data-answer="HOSE" style="top:142px; left:-30px;"></div>
-            
             <div class="part-indicator" style="top:250px; left:100px;"></div>
             <div class="part-line" style="top:254px; left:100px; width:35px; transform:rotate(180deg);"></div>
             <div class="part-target" data-answer="NOZZLE" style="top:235px; left:-10px;"></div>
@@ -175,7 +169,6 @@
         <h3>Call for Backup</h3>
         <p id="s2-desc" style="font-size: 13px;">You’ve got the extinguisher, but you can’t fight a hospital fire alone. Protocols say you must alert the team while you prepare to fight.</p>
         <button id="s2-start-btn" class="btn" onclick="document.getElementById('s2-desc').style.display='none'; this.style.display='none'; document.getElementById('s2-phone-ui').style.display='block';">GRAB THE UNIT PHONE</button>
-        
         <div id="s2-phone-ui" style="display:none;">
             <p style="font-size: 13px;">Quick! Dial the St. Luke’s Emergency Hotline to bring the professionals to your floor. You must dial the correct number on the keypad and call.</p>
             <div class="iphone-frame">
@@ -212,7 +205,6 @@
         <h3>The Final Stand</h3>
         <p id="s4-desc" style="font-size: 13px;">The shaking stops. The fire is still there and growing. It’s now or never. Use the extinguisher correctly, show us you know the right steps to stop the blaze before it reaches the patient rooms.</p>
         <button id="s4-start-btn" class="btn" onclick="startPassTask()">STOP THE BLAZE</button>
-        
         <div id="s4-content-ui" style="display:none;">
             <p style="font-size: 13px;">What is the correct sequence to activate the extinguisher and put out the fire? You must complete the sequence by dragging and dropping them correctly.</p>
             <div style="text-align:left; font-size:13px; background:#f8fafc; padding:15px; border-radius:12px; color:black; line-height:2;">
@@ -235,8 +227,11 @@
     </div>
 
     <div id="congrats" class="checkpoint-box">
-        <h1 style="color:#2563eb;">MISSION ACCOMPLISHED! 🏆</h1>
-        <div style="text-align: left; font-size: 13px; padding: 10px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #3b82f6; margin-bottom: 15px;">
+        <div class="buster-character" style="font-size: 80px;">🧯</div>
+        <h1 style="color:#2563eb; margin-top: 10px;">MISSION ACCOMPLISHED! 🏆</h1>
+        <div id="final-congrats-bubble" class="speech-bubble">Great work, Partner! You've mastered the fire safety protocols. Now, let's get you that certificate!</div>
+        <div style="text-align: left; font-size: 13px; padding: 15px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #3b82f6; margin-bottom: 15px;">
+            <p>To claim your certificate:</p>
             <p>1. Click <b>REVEAL MY CODE</b>.<br>2. <b>Copy</b> the code from the new tab.<br>3. <b>Paste</b> it into your verification form.</p>
         </div>
         <button class="btn" style="background:#3b82f6;" onclick="revealCodeRedirect()">REVEAL MY CODE</button>
@@ -279,8 +274,18 @@
     let storyIndex = 0;
 
     function triggerErr() {
-        const msgs = ["Try Again!", "Error", "Wrong"];
-        alert(msgs[Math.floor(Math.random() * msgs.length)]);
+        const msgs = [
+            "Whoops! That's not the right move, Partner. Try again!",
+            "Careful! We need to follow the protocol exactly. Let's try that one more time.",
+            "Not quite! Remember your training. Give it another shot!",
+            "Buster says: 'Check your steps!' Let's try again."
+        ];
+        document.getElementById('buster-error-text').innerText = msgs[Math.floor(Math.random() * msgs.length)];
+        document.getElementById('buster-error-box').style.display = 'block';
+    }
+
+    function closeError() {
+        document.getElementById('buster-error-box').style.display = 'none';
     }
 
     function showForm() { document.getElementById('pre-game-box').style.display = 'none'; document.getElementById('player-form-box').style.display = 'block'; }
@@ -392,19 +397,31 @@
         document.addEventListener("pointerup", (e) => {
             if (!activeItem) return;
             activeItem.style.visibility = 'hidden'; 
-            const target = document.elementFromPoint(e.clientX, e.clientY); 
+            
+            // MAGNETIC SNAPPING LOGIC
+            // Check all potential targets for distance
+            let snappingTarget = null;
+            const targets = document.querySelectorAll(".part-target, .drop-zone, .t-trg");
+            targets.forEach(t => {
+                const rect = t.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const dist = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
+                if (dist < 50) snappingTarget = t; // Magnetic pull radius of 50px
+            });
+
             activeItem.style.visibility = 'visible';
             
-            if (target && target.classList.contains("part-target")) {
-                if (target.dataset.answer === activeItem.innerText) {
-                    target.innerText = activeItem.innerText; target.classList.add("filled-correct"); activeItem.style.display = "none";
+            if (snappingTarget && snappingTarget.classList.contains("part-target")) {
+                if (snappingTarget.dataset.answer === activeItem.innerText) {
+                    snappingTarget.innerText = activeItem.innerText; snappingTarget.classList.add("filled-correct"); activeItem.style.display = "none";
                     if (document.querySelectorAll('#quiz-section .filled-correct').length === 6) document.getElementById("quizReturnBtn").style.display = "block";
                 } else { triggerErr(); }
             }
-            if (target && target.classList.contains("drop-zone")) handleGridDrop(activeItem, target);
-            if (target && target.classList.contains("t-trg")) {
-                if (target.id === "slot-"+activeItem.innerText) {
-                    target.innerText = activeItem.innerText; target.classList.add("slot-correct"); activeItem.style.display = "none";
+            else if (snappingTarget && snappingTarget.classList.contains("drop-zone")) handleGridDrop(activeItem, snappingTarget);
+            else if (snappingTarget && snappingTarget.classList.contains("t-trg")) {
+                if (snappingTarget.id === "slot-"+activeItem.innerText) {
+                    snappingTarget.innerText = activeItem.innerText; snappingTarget.classList.add("slot-correct"); activeItem.style.display = "none";
                     pcCount++; if(pcCount===4) document.getElementById("passReturnBtn").style.display = "block";
                 } else { triggerErr(); }
             }
@@ -468,6 +485,14 @@
         
         document.getElementById('buster-comment-text').innerText = busterComments[wavesCleared];
         document.getElementById('buster-comment-box').style.display = 'block';
+        
+        // DYNAMIC BUTTON TEXT FIX
+        const btn = document.getElementById('busterCommentBtn');
+        if (wavesCleared === 9) {
+            btn.innerText = "CLAIM MY MISSION REWARDS →";
+        } else {
+            btn.innerText = "CONTINUE TO EXTINGUISH FIRE →";
+        }
     }
 
     function finalReturnToHallway() {
@@ -525,14 +550,14 @@
             document.getElementById("gridNextBtn").innerText = "STAYING SAFE";
             items=[{t:"🙇 DUCK",c:true,s:0},{t:"🛡️ COVER",c:true,s:1},{t:"✊ HOLD",c:true,s:2},{t:"🏃 RUN",c:false},{t:"🏢 LIFT",c:false},{t:"📢 SHOUT",c:false}]; 
         } 
-        else if(stg===9) { // Quezon City
+        else if(stg===9) { 
             document.getElementById("grid-title").innerText="Get Out (St. Luke's Medical Center - Quezon City)"; 
             document.getElementById("grid-instr").innerText="The fire in the Main Building has grown too large. The order comes over the radio: EVACUATE. You are in the St. Luke's Quezon City campus and need to lead people to the street.";
             document.getElementById("grid-start-btn").innerText = "MOVING TO ASSEMBLY AREA";
             document.getElementById("gridNextBtn").innerText = "MOVING TO SAFETY";
             items=[{t:"Sta. Ignaciana St.",c:true},{t:"MAB Parking",c:false},{t:"E. Rodriguez Lobby",c:false},{t:"Canteen Entrance",c:false}];
         } 
-        else if(stg===10) { // Global City
+        else if(stg===10) { 
             document.getElementById("grid-title").innerText="Get Out (St. Luke's Medical Center - Global City)"; 
             document.getElementById("grid-instr").innerText="You are now at the St. Luke's Global City campus. You must lead your team out of the building to the designated outdoor safe zone.";
             document.getElementById("grid-start-btn").innerText = "MOVING TO ASSEMBLY AREA";
@@ -549,13 +574,13 @@
         document.getElementById("grid-start-btn").style.display = 'none';
         document.getElementById("grid-content-ui").style.display = 'block';
         
-        if(wavesCleared === 2) { // Wave 3
+        if(wavesCleared === 2) { 
              document.getElementById("grid-instr").innerText = "Earthquake! Drop the extinguisher and protect yourself. What are the three steps to safety? You must drag the person to the correct sequence during an earthquake.";
         }
-        else if(wavesCleared === 8) { // Wave 9 (QC)
+        else if(wavesCleared === 8) { 
             document.getElementById("grid-instr").innerText = "You are at the hospital canteen. You need to lead the people to the nearest safe assembly area for the St. Luke's Quezon City? You must drag the person below to safety.";
         } 
-        else if(wavesCleared === 9) { // Wave 10 (Global City)
+        else if(wavesCleared === 9) { 
             document.getElementById("grid-instr").innerText = "You are at the 5th floor main building when the alarms scream. You need to lead the people to the nearest safe assembly area for St. Luke's Global City? You must drag the person below to safety.";
         }
     }
@@ -603,20 +628,18 @@
         document.getElementById("logic-start-btn").style.display = 'none';
         document.getElementById("logic-body").style.display = 'block';
         
-        if(wavesCleared >= 5 && wavesCleared <= 7) { 
-            const qArea = document.getElementById("logic-question-area");
-            if(qArea) qArea.style.display = "block";
-        }
-
-        if(wavesCleared === 4) { // Wave 5 (RACE)
+        if(wavesCleared === 4) { 
             document.getElementById("logic-desc").innerHTML = `
-                <p style="font-size:20px; color:#1e293b; line-height:1.4;">
+                <p style="font-size:22px; font-weight:bold; color:#1e293b; line-height:1.4;">
                     Follow the R-A-C-E steps in the correct order to manage the scene. 
                     You must tap the correct meaning of R-A-C-E.
                 </p>`;
             rStep = 0; 
             raceSelections = []; 
             drawRace(); 
+        } else if (wavesCleared >= 5 && wavesCleared <= 7) {
+            document.getElementById('logic-question-area').style.display = 'block';
+            document.getElementById('logic-color-grid').style.display = 'flex';
         }
     }
     
@@ -625,11 +648,11 @@
             {l:'R', t:'Rescue 🚑', a:['Rescue 🚑'], opts: ['Rescue 🚑', 'Run 🏃', 'Remove 🗑️', 'Rest 💤']},
             {l:'A', t:'Alarm 🔔', a:['Alarm 🔔'], opts: ['Alarm 🔔', 'Attack 👊', 'Alert 🚨', 'Aim 🎯']},
             {l:'C', t:'Contain 🛡️', a:['Contain 🛡️'], opts: ['Contain 🛡️', 'Confine 🔒', 'Connect 🔗', 'Cover 🙊']},
-            {l:'E', t:'Evacuate  🏃', a:['Evacuate 🏃'], opts: ['Extinguish 🧯', 'Evacuate 🏃', 'Eat 🍎', 'Exit 🚪']}
+            {l:'E', t:'Evacuate 🏃', a:['Evacuate 🏃'], opts: ['Extinguish 🧯', 'Evacuate 🏃', 'Eat 🍎', 'Exit 🚪']}
         ];
         const o = document.getElementById("logic-body"); 
         o.innerHTML = `<div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">` + 
-            raceData.map(r=>`<div class="race-letter-box" id="r${r.l}"><b>${r.l}</b><div style="font-size:7px;" id="rt${r.l}"></div></div>`).join('') + 
+            raceData.map(r=>`<div class="race-letter-box" id="r${r.l}"><b>${r.l}</b><div style="font-size:9px;" id="rt${r.l}"></div></div>`).join('') + 
             `</div><div class="choice-grid" id="ro"></div>`;
         
         for(let i=0; i<rStep; i++){ 
@@ -651,7 +674,7 @@
         
         optionsToShow.sort(() => Math.random() - 0.5).forEach(opt => {
             let b = document.createElement("div"); 
-            b.className = "choice-box-uniform"; 
+            b.className = "choice-box-uniform race-choice"; 
             if(raceSelections.includes(opt)) b.style.background = "#16a34a";
             b.innerText = opt;
             b.onclick = () => { 
@@ -690,7 +713,7 @@
             btnTxt = "CODE ACTIVATED";
         } else if (s === 7) { 
             title = "Security Alert"; 
-            scenarioText = "A frantic nurse shouts that a baby is missing from the nursery and a stranger was seen near the elevators. You need to trigger a lockdown immediately.";
+            scenarioText = "A frantic nurse shouts that a baby is missing and a stranger was seen near the elevators. You need to trigger a lockdown immediately.";
             desc = "What is the specific code for a Missing Child/Abduction? You must tap the correct code to be activated.";
             winC = "Pink"; 
             btnTxt = "SECURE THE EXITS";
@@ -706,12 +729,12 @@
         document.getElementById("logic-desc").innerHTML = `
             <p style="font-size:13px; color:#1e293b; line-height:1.4; margin-bottom:10px;">${scenarioText}</p>
             <div id="logic-question-area" style="display:none;">
-                <p style="font-size:12px; font-weight:bold; color:#2563eb;">${desc}</p>
+                <p style="font-size:14px; font-weight:bold; color:#2563eb;">${desc}</p>
             </div>
         `;
         document.getElementById("logicNextBtn").innerText = btnTxt;
         
-        document.getElementById("logic-body").innerHTML = `<div class="rainbow-grid">` + colors.map(c => {
+        document.getElementById("logic-body").innerHTML = `<div class="rainbow-grid" id="logic-color-grid" style="display:none;">` + colors.map(c => {
             let bg = c.toLowerCase(); 
             if (bg === 'silver') bg = '#717171'; 
             if (bg === 'pink') bg = '#FF1493'; 
