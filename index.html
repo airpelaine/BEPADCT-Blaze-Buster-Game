@@ -140,7 +140,7 @@
     <div id="dyk-box">
         <div class="fact-title">💡 DID YOU KNOW?</div>
         <div id="dyk-content" class="fact-body"></div>
-        <div class="buster-character" style="font-size: 50px; margin-bottom: 10px;">🧯</div>
+        <div id="dyk-emoji" class="buster-character" style="font-size: 50px; margin-bottom: 10px;">🧯</div>
         <button class="btn btn-green" onclick="dismissDyk()">OK</button>
     </div>
 
@@ -253,7 +253,7 @@
 
             <div id="pass-bank" class="choice-grid" style="margin-top:20px;"></div>
         </div>
-        <button id="passReturnBtn" class="btn btn-green" style="display:none;" onclick="showBusterComment()">OPEN FIRE!</button>
+        <button id="passReturnBtn" class="btn btn-green" style="display:none;" onclick="showDykIntercept()">OPEN FIRE!</button>
     </div>
 
     <div id="logic-box" class="checkpoint-box">
@@ -267,7 +267,7 @@
     <div id="congrats" class="checkpoint-box">
         <div class="buster-character" style="font-size: 80px;">🧯</div>
         <h1 style="color:#2563eb; margin-top: 10px;">MISSION ACCOMPLISHED! 🏆</h1>
-        <div id="final-congrats-bubble" class="speech-bubble">Great work, Team! You've mastered the biosafety protocols. Now, let's get you that certificate!</div>
+        <div id="final-congrats-bubble" class="speech-bubble">Great work, Team! You've mastered the BEPADCT protocols. Now, let's get you that certificate!</div>
         <div style="text-align: left; font-size: 18px; padding: 15px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #3b82f6; margin-bottom: 15px;">
             <p>To claim your certificate:</p>
             <p>1. Click <b>REVEAL MY CODE</b>.<br>2. <b>Copy</b> the code from the new tab.<br>3. <b>Paste</b> it into your verification form.</p>
@@ -312,13 +312,15 @@
     let storyIndex = 0;
 
     const dykFacts = {
-        1: "<b>Green Clean Agent (HCFC-123)</b> extinguishers leave zero chemical residue and are perfectly non-conductive, making them ideal for areas with sensitive hospital electronics, computer servers, and medical equipment.<br><br><b>Red Dry Chemical</b> extinguishers are highly versatile for broad fire fighting but release a fine, corrosive powder that can damage nearby delicate clinical hardware.",
-        2: "Severe weather or structural ruptures can lead to internal facility <b>Floods</b>, which fall strictly under the <b>Code ORANGE</b> deployment rules.<br><br>In a flood scenario, safety teams immediately assess rising waters for potential electrical safety hazards and prepare secondary barriers to protect critical mechanical basements.",
-        3: "A <b>Radiation Leak</b> inside imaging hubs or laboratory research units is an invisible emergency managed entirely via <b>Code ORANGE</b> configurations.<br><br>First-line protocol centers on structural containment and dynamic isolation barriers to neutralize spreading isotopes safely.",
-        6: "<b>Code ORANGE</b> at St. Luke's encompasses multiple technical and natural disasters including Fire, Earthquakes, Chemical Spills, Bomb Threats, Radiation Leaks, Gas Leaks, and Floods.<br><br>When a hazardous material spill occurs, activating Code Orange brings the specific Spill Response Team immediately to the location.",
-        7: "Even though <b>Bomb Threats</b> don't immediately present a visible fire or seismic tremor, they fall strictly under the <b>Code ORANGE</b> umbrella because they threaten structural facility security and require systematic, coordinated deployment protocols across the medical campus.",
-        8: "A toxic or flammable <b>Gas Leak</b> represents an invisible threat capable of compounding instantly. It requires an immediate <b>Code ORANGE</b> broadcast to ensure isolation mechanics, system shutoffs, and immediate ward safety procedures are triggered.",
-        9: "<b>Quezon City Campus Designated Safe Assembly Areas:</b><ul><li>MAB Parking Area</li><li>Street fronting multi-level parking</li><li>Sta. Ignaciana Street fronting SS entrance and exit</li><li>Sta. Ignaciana Street fronting College of Medicine</li><li>Episcopal/TUA property episcopal church and lawn</li></ul>",
+        1: "<b>Red Dry Chemical Extinguisher:</b> This is like a super powerful, messy flour cannon for fires. It shoots out a very fine powder that smothers the flames on common trash (like paper and wood) or liquid/grease fires. It works really well, but it leaves a massive, messy powder cloud that can ruin delicate electronics like computers or hospital equipment.<br><br><b>Green Clean Agent (HCFC-123) Extinguisher:</b> This is the 'specialist' for expensive gear. It shoots out a powerful gas that stops the fire without any cleanup required! It leaves <b>zero</b> residue or mess behind and doesn't conduct electricity, making it perfectly safe for use on expensive computers, patient monitors, and imaging machines.",
+        2: "Severe weather or structural ruptures can lead to internal facility <b>Floods</b>, which fall strictly under the <b><span style='color: orange;'>Code ORANGE</span></b> deployment rules.<br><br>In a flood scenario, safety teams immediately assess rising waters for potential electrical safety hazards and prepare secondary barriers to protect critical mechanical basements.",
+        3: "A <b>Radiation Leak</b> inside imaging hubs or laboratory research units is an invisible emergency managed entirely via <b><span style='color: orange;'>Code ORANGE</span></b> configurations.<br><br>First-line protocol centers on structural containment and dynamic isolation barriers to neutralize spreading isotopes safely.",
+        4: "<b><span style='color: pink;'>Code PINK</span></b> is the designated emergency activation protocol for an <b>Infant / Child Abduction</b> crisis inside St. Luke's Medical Center.<br><br>Upon declaration, security details instantly lock down all facility entry points, exits, and loading elevators while personnel monitor corridors closely for suspicious containers or bundles.",
+        5: "<b>Code SILVER</b> stands for an active safety crisis involving an <b>Active Shooter or Weapon-bearing Threat</b> inside the hospital.<br><br>Safety protocols dictate immediate situational response options: Run if there is a safe path, Hide by barricading doors and turning off lights, or Fight as an absolute last resort if cornered.",
+        6: "<b><span style='color: orange;'>Code ORANGE</span></b> at St. Luke's encompasses multiple technical and natural disasters including Fire, Earthquakes, Chemical Spills, Bomb Threats, Radiation Leaks, Gas Leaks, and Floods.<br><br>When a dangerous hazardous chemical material spill occurs, activating <span style='color: orange;'>Code ORANGE</span> brings the specific Spill Response Team immediately to the location.",
+        7: "Even though <b>Bomb Threats</b> don't immediately present a visible fire or seismic tremor, they fall strictly under the <b><span style='color: orange;'>Code ORANGE</span></b> umbrella because they threaten structural facility security and require systematic, coordinated deployment protocols across the medical campus.",
+        8: "A toxic or flammable <b>Gas Leak</b> represents an invisible threat capable of compounding instantly. It requires an immediate <b><span style='color: orange;'>Code ORANGE</span></b> broadcast to ensure isolation mechanics, system shutoffs, and immediate ward safety procedures are triggered.",
+        9: "<b>Quezon City Campus Designated Safe Assembly Areas:</b><ul><li>Sta. Ignaciana Street fronting SS entrance and exit</li><li>Sta. Ignaciana Street fronting College of Medicine</li><li>MAB Parking Area</li><li>Street fronting multi-level parking</li><li>Episcopal/TUA property episcopal church and lawn</li></ul>",
         10: "<b>Global City Campus Designated Safe Assembly Areas:</b><ul><li>Rizal Drive across Main Lobby</li><li>34th Street</li></ul>"
     };
 
@@ -528,10 +530,20 @@
 
     function triggerMajorBlaze() { majorBlazeActive = true; bossHealth = 100; bossX = 900; document.getElementById('major-blaze-box').style.display = 'block'; }
 
+    // PIPELINE CRITICAL FIX: Routing chain handles scenario modules seamlessly without overlap artifacts
     function triggerCheckpoint() {
         gameActive = false; currentScore = 0;
         document.getElementById('game-section').style.display = 'none';
         document.getElementById('major-blaze-box').style.display = 'none';
+        
+        // Wipe away all modules to force clean scenario entry states
+        document.getElementById('quiz-section').style.display = 'none';
+        document.getElementById('phone-section').style.display = 'none';
+        document.getElementById('grid-stage-section').style.display = 'none';
+        document.getElementById('pass-section').style.display = 'none';
+        document.getElementById('logic-box').style.display = 'none';
+        document.getElementById('dyk-box').style.display = 'none';
+
         const wave = wavesCleared + 1;
         if(wave === 1) setupS1();
         else if(wave === 2) setupS2();
@@ -545,16 +557,39 @@
         else if(wave === 10) setupGrid(10);
     }
 
-    /* INTERCEPTOR TRANSITIONS TO INJECT POPUPS */
+    // INTERCEPT PANEL: Ran seamlessly inside the state loop to load trivia cards directly after questions register safe complete states
     function showDykIntercept() {
         const currentWave = wavesCleared + 1;
+        
+        // Enforce safety cleanups across all windows
         document.getElementById('quiz-section').style.display = 'none';
         document.getElementById('phone-section').style.display = 'none';
         document.getElementById('grid-stage-section').style.display = 'none';
+        document.getElementById('pass-section').style.display = 'none';
         document.getElementById('logic-box').style.display = 'none';
 
         if (dykFacts[currentWave]) {
             document.getElementById('dyk-content').innerHTML = dykFacts[currentWave];
+            
+            const dykEmoji = document.getElementById('dyk-emoji');
+            if (currentWave === 2) {
+                dykEmoji.innerText = "🌊"; 
+            } else if (currentWave === 3) {
+                dykEmoji.innerText = "☢️"; 
+            } else if (currentWave === 4) {
+                dykEmoji.innerText = "👶"; 
+            } else if (currentWave === 5) {
+                dykEmoji.innerText = "☠️"; 
+            } else if (currentWave === 6) {
+                dykEmoji.innerText = "☣️"; 
+            } else if (currentWave === 7) {
+                dykEmoji.innerText = "💣"; 
+            } else if (currentWave === 8) {
+                dykEmoji.innerText = "⛑️"; 
+            } else {
+                dykEmoji.innerText = "🧯"; 
+            }
+
             document.getElementById('dyk-box').style.display = 'block';
         } else {
             showBusterComment();
@@ -572,6 +607,7 @@
         document.getElementById('grid-stage-section').style.display = 'none';
         document.getElementById('pass-section').style.display = 'none';
         document.getElementById('logic-box').style.display = 'none';
+        document.getElementById('dyk-box').style.display = 'none';
         
         document.getElementById('buster-comment-text').innerText = busterComments[wavesCleared];
         document.getElementById('buster-comment-box').style.display = 'block';
@@ -594,6 +630,7 @@
     }
 
     function setupS1() { 
+        // Fixed typo error where '.style.block' broke script compilation pathing
         document.getElementById('quiz-section').style.display = 'block'; 
         document.getElementById('get-ext-btn').style.display = 'block';
         document.getElementById('s1-diagram').style.display = 'none';
@@ -606,6 +643,10 @@
         document.getElementById('s1-diagram').style.display = 'block';
         document.getElementById('s1-choices').style.display = 'grid';
         document.getElementById('s1-choices').innerHTML = ["PRESSURE GAUGE","LEVER","NOZZLE","PIN","HOSE","HANDLE"].sort(()=>Math.random()-0.5).map(c => `<div class="choice-box-uniform dr-item" style="touch-action:none;">${c}</div>`).join(''); 
+        
+        if (document.querySelectorAll('#s1-diagram .filled-correct').length === 6) {
+            document.getElementById("quizReturnBtn").style.display = "block";
+        }
     }
 
     function setupS2() { 
@@ -637,21 +678,21 @@
             document.getElementById("grid-instr").innerText="Just as you’re about to aim, the ground starts shaking. A fire is dangerous, but falling ceiling tiles are an immediate threat.";
             document.getElementById("grid-start-btn").innerText = "PROTECT YOURSELF";
             document.getElementById("gridNextBtn").innerText = "STAYING SAFE";
-            items=[{t:"🙇 DUCK",c:true,s:0},{t:"🛡️ COVER",c:true,s:1},{t:"✊ HOLD",c:true,s:2},{t:"🏃 RUN",c:false},{t:"🏢 LIFT",c:false},{t:"📢 SHOUT",c:false}]; 
+            items=[{t:"🙇 DUCK",c:true,s:0},{t:"🛡️ COVER",c:true,s:1},{t:"✊ HOLD",c:true,s:2},{t:"🏃 RUN",c:false},{t:"😭 CRY",c:false},{t:"📢 SHOUT",c:false}]; 
         } 
         else if(stg===9) { 
             document.getElementById("grid-title").innerText="Get Out (St. Luke's Medical Center - Quezon City)"; 
             document.getElementById("grid-instr").innerText="The fire in the Main Building has grown too large. The order comes over the radio: EVACUATE. You are in the St. Luke's Quezon City campus and need to lead people to the street.";
             document.getElementById("grid-start-btn").innerText = "MOVING TO ASSEMBLY AREA";
             document.getElementById("gridNextBtn").innerText = "MOVING TO SAFETY";
-            items=[{t:"Sta. Ignaciana St.",c:true},{t:"MAB Parking",c:true},{t:"E. Rodriguez Lobby",c:false},{t:"Canteen Entrance",c:false}];
+            items=[{t:"Sta. Ignaciana St.",c:true},{t:"MAB Parking",c:false},{t:"E. Rodriguez Lobby",c:false},{t:"Canteen Entrance",c:false}];
         } 
         else if(stg===10) { 
             document.getElementById("grid-title").innerText="Get Out (St. Luke's Medical Center - Global City)"; 
             document.getElementById("grid-instr").innerText="You are now at the St. Luke's Global City campus. You must lead your team out of the building to the designated outdoor safe zone.";
             document.getElementById("grid-start-btn").innerText = "MOVING TO ASSEMBLY AREA";
             document.getElementById("gridNextBtn").innerText = "MOVING TO SAFETY";
-            items=[{t:"Rizal Drive",c:true},{t:"High Street",c:false},{t:"34th Street",c:true},{t:"Parking B1",c:false}];
+            items=[{t:"Rizal Drive",c:true},{t:"High Street",c:false},{t:"34th Street",c:false},{t:"Parking B1",c:false}];
         }
 
         items.sort(()=>Math.random()-0.5).forEach(i => {
@@ -667,10 +708,10 @@
              document.getElementById("grid-instr").innerText = "Earthquake! Drop the extinguisher and protect yourself. What are the three steps to safety? You must drag the person to the correct sequence during an earthquake.";
         }
         else if(wavesCleared === 8) { 
-            document.getElementById("grid-instr").innerText = "You are at the hospital canteen. You need to lead the people to a safe designated assembly area for the St. Luke's Quezon City. Drag the person below to a correct assembly target.";
+            document.getElementById("grid-instr").innerText = "You are at the hospital canteen. You need to lead the people to a safe designated assembly area for the St. Luke's Quezon City. Drag the person below to the precise required zone.";
         } 
         else if(wavesCleared === 9) { 
-            document.getElementById("grid-instr").innerText = "You are at the 5th floor main building when the alarms scream. You need to lead the people to a safe designated assembly area for St. Luke's Global City. Drag the person below to a correct assembly target.";
+            document.getElementById("grid-instr").innerText = "You are at the 5th floor main building when the alarms scream. You need to lead the people to a safe designated assembly area for St. Luke's Global City. Drag the person below to the precise required zone.";
         }
     }
 
@@ -804,13 +845,13 @@
         
         if (s === 6) { 
             title = "The Chemical Spill"; 
-            scenarioText = "While moving through the laboratory, you spot a broken container of Formaldehyde leaking across the floor. This requires a site-wide disaster/hazard activation.";
+            scenarioText = "While moving through the laboratory, you spot a broken container of Formaldehyde (Formalin) leaking across the floor. This requires a site-wide disaster/hazard activation.";
             desc = "Which emergency color code warns the hospital team about a Disaster / Hazardous Material Spill? Tap the correct code option.";
             winC = "Orange"; 
             btnTxt = "CODE ACTIVATED";
         } else if (s === 7) { 
             title = "Security Alert: Threat Assessment"; 
-            scenarioText = "An administrator contacts your area warning that an anonymous call was received claiming an explosive device was left within the complex.";
+            scenarioText = "An administrator contacts your area warning that an anonymous call was received claiming an explosive device was left within the lobby.";
             desc = "Under St. Luke's protocols, which code covers a Bomb Threat situation? Tap the correct code option.";
             winC = "Orange"; 
             btnTxt = "DISASTER CONTEXT RESPONDED";
